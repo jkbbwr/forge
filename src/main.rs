@@ -1,37 +1,14 @@
 #![allow(dead_code)]
 
-use crate::build::setup;
-use crate::forge::ForgeFile;
-use crate::ninja::NinjaWriter;
-use anyhow::Error;
-use globwalk::{GlobError, WalkError};
-use std::path::{Path, PathBuf};
+use crate::commands::Forge;
 use structopt::StructOpt;
 
 mod build;
 mod forge;
 mod ninja;
+mod commands;
 
-#[derive(StructOpt, Debug)]
-enum Forge {
-    #[structopt(about = "Create a new project.")]
-    New,
-    #[structopt(about = "Setup a new build directory.")]
-    Init,
-    #[structopt(about = "Manage dependencies.")]
-    Deps(Deps),
-    #[structopt(about = "Repair an existing build directory.")]
-    Repair,
-    #[structopt(about = "Ensure the project is in a good state.")]
-    Doctor
-}
-
-#[derive(StructOpt, Debug)]
-enum Deps {
-    #[structopt(about = "Sync the deps.")]
-    Sync
-}
-
+use commands::Command;
 /*
    println!("{:#?}", forge);
    let mut ninja = NinjaWriter::new();
@@ -45,6 +22,15 @@ enum Deps {
 */
 fn main() -> anyhow::Result<()> {
     let app = Forge::from_args();
-    println!("{:#?}", app);
+
+    match app {
+        Forge::New(new) => {
+            new.execute()?;
+        }
+        Forge::Build => {}
+        Forge::Deps(_) => {}
+        Forge::Repair => {}
+        Forge::Doctor => {}
+    }
     Ok(())
 }

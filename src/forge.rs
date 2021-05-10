@@ -1,5 +1,4 @@
-use globwalk::{GlobError, WalkError};
-use serde::de::{DeserializeOwned, Error};
+use serde::de::Error;
 use serde::{Deserialize, Deserializer};
 use std::ffi::OsStr;
 use std::fmt;
@@ -64,17 +63,18 @@ pub struct ForgeFile {
 }
 
 fn expand_glob<'de, D>(deserializer: D) -> Result<Vec<PathBuf>, D::Error>
-    where
-        D: Deserializer<'de>,
+where
+    D: Deserializer<'de>,
 {
     let patterns: Vec<String> = Deserialize::deserialize(deserializer)?;
     let mut results = Vec::new();
     for pattern in patterns {
         for walker in globwalk::glob(pattern) {
             for path in walker {
-                results.push(path.map_err(|_e| {
-                    D::Error::custom("Failed to walk.")
-                })?.into_path())
+                results.push(
+                    path.map_err(|_e| D::Error::custom("Failed to walk."))?
+                        .into_path(),
+                )
             }
         }
     }

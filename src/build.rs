@@ -1,7 +1,7 @@
 use crate::forge::ForgeFile;
 use crate::ninja::NinjaWriter;
 use anyhow::Error;
-use std::fs::{create_dir, create_dir_all, File};
+use std::fs::{create_dir_all, File};
 use std::io::Write;
 use std::path::Path;
 

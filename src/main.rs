@@ -24,13 +24,11 @@ fn main() -> anyhow::Result<()> {
     let app = Forge::from_args();
 
     match app {
-        Forge::New(new) => {
-            new.execute()?;
-        }
-        Forge::Build => {}
+        Forge::New(new) => new.execute()?,
         Forge::Deps(_) => {}
-        Forge::Repair => {}
-        Forge::Doctor => {}
+        Forge::Build(_) => {}
+        Forge::Doctor(_) => {}
     }
+
     Ok(())
 }

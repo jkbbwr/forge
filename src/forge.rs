@@ -1,5 +1,5 @@
 use serde::de::Error;
-use serde::{Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize};
 use std::ffi::OsStr;
 use std::fmt;
 use std::fmt::{Display, Formatter};
@@ -7,7 +7,7 @@ use std::fs::read_to_string;
 use std::path::PathBuf;
 use toml::from_str;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum TargetType {
     Exe,
@@ -29,7 +29,7 @@ impl Display for TargetType {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum BuildType {
     Release,
@@ -55,7 +55,7 @@ impl Default for BuildType {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ForgeFile {
     pub project: Project,
     #[serde(rename = "target")]
@@ -82,7 +82,7 @@ where
     Ok(results)
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Target {
     pub name: String,
     pub r#type: TargetType,
@@ -96,13 +96,14 @@ fn release_flags() -> String {
     "-O3".into()
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Project {
     pub name: String,
+    #[serde(skip_serializing)]
     pub c_flags: String,
-    #[serde(default = "release_flags")]
+    #[serde(default = "release_flags", skip_serializing)]
     pub release_flags: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing)]
     pub build_type: BuildType,
 }
 

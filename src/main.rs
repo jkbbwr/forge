@@ -4,9 +4,10 @@ use crate::commands::Forge;
 use structopt::StructOpt;
 
 mod build;
-mod forge;
-mod ninja;
 mod commands;
+mod forge;
+mod new;
+mod ninja;
 
 use commands::Command;
 /*

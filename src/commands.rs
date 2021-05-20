@@ -1,5 +1,7 @@
 use structopt::StructOpt;
 
+use crate::new;
+
 pub trait Command {
     fn execute(self) -> anyhow::Result<()>;
 }
@@ -28,9 +30,9 @@ pub struct New {
     name: String,
 }
 
-
 impl Command for New {
     fn execute(self) -> anyhow::Result<()> {
+        new::new(&self.name)?;
         Ok(())
     }
 }

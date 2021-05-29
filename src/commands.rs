@@ -28,11 +28,17 @@ pub enum Deps {
 pub struct New {
     #[structopt(about = "Project name.")]
     name: String,
+    #[structopt(long, help = "Use a binary (application) template")]
+    bin: bool,
+    #[structopt(long, help = "Use a library template", conflicts_with = "bin")]
+    lib: bool,
+    #[structopt(long, short, help = "Use verbose output")]
+    verbose: bool,
 }
 
 impl Command for New {
     fn execute(self) -> anyhow::Result<()> {
-        new::new(&self.name)?;
+        new::new(&self.name, self.lib, self.verbose)?;
         Ok(())
     }
 }

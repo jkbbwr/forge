@@ -32,11 +32,13 @@ pub struct New {
     bin: bool,
     #[structopt(long, help = "Use a library template", conflicts_with = "bin")]
     lib: bool,
+    #[structopt(long, short, help = "Use verbose output")]
+    verbose: bool,
 }
 
 impl Command for New {
     fn execute(self) -> anyhow::Result<()> {
-        new::new(&self.name, self.lib)?;
+        new::new(&self.name, self.lib, self.verbose)?;
         Ok(())
     }
 }
